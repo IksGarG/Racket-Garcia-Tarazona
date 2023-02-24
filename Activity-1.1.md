@@ -23,7 +23,33 @@ https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols
 
     $\sum_{i=0}^{n}i^3 = \frac{n^2(n+1)^2}{4}$
 
-    _**SOLUTION:**_
+    _**SOLUTION:**_:w
+    
+    I. Basis: if $n=0$ the $\sum_{i=0}^{0}i^3 = \frac{0^2(0+1)^2}{4} = 0$
+
+    II. Inductive Hypothesis: if $n=k$ then it holds that:
+
+    $\sum_{i=0}^{k}i^3=\frac{k^2(k+1)^2}{4}$
+
+    III. Inductive Step: For $n=(k+1)$
+
+    $\sum_{i=0}^{k+1}i^3=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\sum_{i=0}^{k}i^3 + (k+1)^3=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{k^2(k+1)^2}{4} + (k+1)^3 =\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{k^2(k+1)^2}{4} + \frac{4(k+1)^3}{4} =\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{k^2(k+1)^2+4(k+1)^3}{4}=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{(k^2+4k+4)(k+1)^2}{4}=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{(k+2)^2(k+1)^2}{4}=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+    $\frac{(k+1)^2((k+1)+1)^2}{4}=\frac{(k+1)^2((k+1)+1)^2}{4}$
+
+Then, we can infer that the sum applies for all $n$
 
 
 
