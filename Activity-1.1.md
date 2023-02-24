@@ -25,7 +25,7 @@ https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols
 
     _**SOLUTION:**_:w
     
-    I. Basis: if $n=0$ the $\sum_{i=0}^{0}i^3 = \frac{0^2(0+1)^2}{4} = 0$
+    I. Basis: if $n=0$ then $\sum_{i=0}^{0}i^3 = \frac{0^2(0+1)^2}{4} = 0$
 
     II. Inductive Hypothesis: if $n=k$ then it holds that:
 
@@ -59,15 +59,15 @@ Then, we can infer that the sum applies for all $n$
 
     a. the depth of the tree
 
-    ``
+    The tree is 5 levels deep.
 
     b. the ancestors of x18
 
-    ``
+    x18 has the following ancestors: {x15, x10, x4, x1}.
 
     c. the internal nodes of the tree
 
-    ``
+    The internal nodes of the tree are: {x2, x3, x4, x5, x6, x7, x13, x10, x15}
 
     d. the length of the path from x3 to x14
 
