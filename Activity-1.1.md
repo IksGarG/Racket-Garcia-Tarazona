@@ -16,6 +16,7 @@ https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols
 
     _**SOLUTION:**_
 
+    $P(X) = \{ A \cup \{x\} \mid A \in P(X), x \in X \} \cup P(X)$
 
 
 
@@ -23,7 +24,7 @@ https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols
 
     $\sum_{i=0}^{n}i^3 = \frac{n^2(n+1)^2}{4}$
 
-    _**SOLUTION:**_:w
+    _**SOLUTION:**_:e
     
     I. Basis: if $n=0$ then $\sum_{i=0}^{0}i^3 = \frac{0^2(0+1)^2}{4} = 0$
 
@@ -71,12 +72,12 @@ Then, we can infer that the sum applies for all $n$
 
     d. the length of the path from x3 to x14
 
-    ``
+    The length of the path from x3 to x14 is 2.
 
     e. the vertex that is the parent of x16
 
-    ``
+    The vertex that is the parent of x16 is x15.
 
     f. the vertices children of x7
 
-    ``
+    The vertices children of x7 are {x13, x14}.
