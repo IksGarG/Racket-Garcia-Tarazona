@@ -1,8 +1,8 @@
 #|
-Ejercicios 13 a 17
+Ejercicios 13 a 16
 
-Andrés Tarazona Solloa
-Iker García
+Andrés Tarazona Solloa - A01023332
+Iker García - A01782767
 |#
 
 #lang racket
@@ -11,8 +11,11 @@ Iker García
 
 (provide list-of-symbols? swapper dot-product average)
 
+#|
+Ejercicio 13: lista de simbolos
+|#
 (define (list-of-symbols? lst)
-  (trace-let loop ([lst lst])
+  (let loop ([lst lst])
     (if (empty? lst)
       #t
         (if (symbol? (car lst))
@@ -23,7 +26,7 @@ Iker García
 Ejercicio 14: swap dos numeros en la lista
 |#
 (define (swapper a b lst)
-  (trace-let loop ([a a]
+  (let loop ([a a]
                    [b b]
                    [lst lst]
                    [res '()])
@@ -39,7 +42,7 @@ Ejercicio 14: swap dos numeros en la lista
 Ejercicio 15: dot product
 |#
 (define (dot-product lst1 lst2)
-  (trace-let loop ([lst1 lst1] [lst2 lst2] [res 0])
+  (let loop ([lst1 lst1] [lst2 lst2] [res 0])
         (if (or (empty? lst1) (empty? lst2))
           res
           (loop (cdr lst1) (cdr lst2) (+ res (* (car lst1) (car lst2)))))))
@@ -49,7 +52,7 @@ Ejercicio 16: average
 |#
 
 (define (average lst)
-  (trace-let loop ([lst lst] [lst2 lst] [res 0])
+  (let loop ([lst lst] [lst2 lst] [res 0])
     (if (empty? lst)
       (/ res (length lst2))
       (loop (cdr lst) lst2 (+ res (car lst))))))
