@@ -37,6 +37,9 @@ defmodule Lexer do
                    .operations {
                      color: red;
                    }
+                   .comment {
+                     color: grey;
+                   }
                 </style>
               </head>
               <body>
@@ -52,10 +55,14 @@ defmodule Lexer do
     words = String.split(line, " ")
     process_line(words, "")
   end
+  
+  #defp process_line([keyword | rest]) 
 
   defp process_line([keyword | rest], acc) do
-    IO.inspect(keyword, label: "Matching")
-    is_comment = false
+    if Regex.scan(~r/\-\-/, keyword) |> Enum.any?() do
+      process_line([], "<span class=\"comment\">#{keyword}#{Enum.join(rest, "")}</span>")
+
+  else
     html = cond do
       # function
       Regex.scan(~r/\bfunction\b/, keyword) |> Enum.any?() ->
@@ -65,16 +72,12 @@ defmodule Lexer do
       Regex.scan(~r/\bend\b/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
-      # comments
-      Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
-        "placeholder"
-
       # To interpret variables
       Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
       # Operations
-      Regex.scan(~r/(\+|\-|\/|\*)/, keyword) |> Enum.any?() ->
+      Regex.scan(~r/(\+|\-|\/|\*){1}/, keyword) |> Enum.any?() ->
         "<span class=\"operations\">#{keyword}</span>"
 
       # Fors
@@ -132,12 +135,9 @@ defmodule Lexer do
       true ->
         "<span class=\"variable\">#{keyword}</span>"
     end
-
-    if is_comment do
-      "<span class=\"comment\">#{keyword}#{rest}</span>"
-    else
-      process_line(rest, "#{acc} #{html}")
+    process_line(rest, "#{acc} #{html}")
     end
+
   end
 
   defp process_line([], acc), do: acc
