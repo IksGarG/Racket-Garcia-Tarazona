@@ -50,6 +50,7 @@ defmodule Lexer do
 
   defp process_line([keyword | rest], acc) do
     IO.inspect(acc, label: "Current value")
+    is_comment = false
     html = cond do
       # function
       Regex.scan(~r/\bfunction\b/, keyword) |> Enum.any?() ->
@@ -61,7 +62,7 @@ defmodule Lexer do
 
       # comments
       Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{acc}</span>"
+        is_comment = true
 
       # To interpret variables
       Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
@@ -103,7 +104,11 @@ defmodule Lexer do
         "<span class=\"variable\">#{keyword}</span>"
     end
 
-    process_line(rest, "#{acc} #{html}")
+    if is_comment do
+      "<span class=\"comment\">#{keyword}#{rest}</span>"
+    else
+      process_line(rest, "#{acc} #{html}")
+    end
   end
 
   defp process_line([], acc), do: acc
