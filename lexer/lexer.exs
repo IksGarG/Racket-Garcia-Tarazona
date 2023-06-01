@@ -1,3 +1,7 @@
+# With love by:
+#   - Andres Tarazona Solloa
+#   - Iker Garcia German
+
 defmodule Lexer do
   def lexer(in_filename, out_filename) do
     data = in_filename
@@ -132,7 +136,7 @@ defmodule Lexer do
        Regex.scan(~r/(\(|\))/, head) |> Enum.any?() ->
         "<span class=\"parenthesis\">#{head}</span>"
 
-        true -> 
+        true ->
         "<span class=\"rest\">#{head}</span>"
     end
     process_function(tail, "#{acc}#{html}")

@@ -1,3 +1,6 @@
+Andres Tarazona Solloa
+Iker Garcia German
+
 # LEXER de Lua
 
 La funcion del lexer se encuentra en el modulo "Lexer", entonces se llama con Lexer.lexer()
