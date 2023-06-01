@@ -11,28 +11,32 @@ defmodule Lexer do
               <head>
                 <title>Lexer Output</title>
                 <style>
-                  body {
-                    background: #1e1e1e;
-                    font-family: sans-serif;
-                  }
-                  .keyword {
-                    color: blue;
-                  }
-                  .rest {
-                    color: crimson;
-                  }
-                  .highlight {
-                    color: green;
-                  }
-                  .number {
-                    color: brown;
-                  }
-                  .parenthesis {
-                    color: violet;
-                  }
-                  .variable {
-                    color: purple;
-                  }
+                   body {
+                     background: lightgray;
+                     font-family: sans-serif;
+                     font-size: 1.5em;
+                   }
+                   .keyword {
+                     color: navy;
+                   }
+                   .rest {
+                     color: peru;
+                   }
+                   .highlight {
+                     color: green;
+                   }
+                   .number {
+                     color: brown;
+                   }
+                   .parenthesis {
+                     color: black;
+                   }
+                   .variable {
+                     color: purple;
+                   }
+                   .operations {
+                     color: red;
+                   }
                 </style>
               </head>
               <body>
@@ -50,7 +54,7 @@ defmodule Lexer do
   end
 
   defp process_line([keyword | rest], acc) do
-    IO.inspect(acc, label: "Current value")
+    IO.inspect(keyword, label: "Matching")
     is_comment = false
     html = cond do
       # function
@@ -63,11 +67,15 @@ defmodule Lexer do
 
       # comments
       Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
-        is_comment = true
+        "placeholder"
 
       # To interpret variables
       Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
+
+      # Operations
+      Regex.scan(~r/(\+|\-|\/|\*)/, keyword) |> Enum.any?() ->
+        "<span class=\"operations\">#{keyword}</span>"
 
       # Fors
       Regex.scan(~r/\bfor\b/, keyword) |> Enum.any?() ->
@@ -79,6 +87,10 @@ defmodule Lexer do
 
       # repeat
       Regex.scan(~r/\brepeat\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # local
+      Regex.scan(~r/\blocal\b/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
       # until
@@ -100,6 +112,10 @@ defmodule Lexer do
       # parenthesis
       Regex.scan(~r/[\s\S]*\(.*\)/, keyword) |> Enum.any?() ->
         process_function(String.split(keyword, ""), "")
+
+      # table
+      Regex.scan(~r/.*\{(.|\,)*\}/, keyword) |> Enum.any?() ->
+        "<span class=\"parenthesis\">#{keyword}</span>"
 
       # if
       Regex.scan(~r/\bif\b/, keyword) |> Enum.any?() ->

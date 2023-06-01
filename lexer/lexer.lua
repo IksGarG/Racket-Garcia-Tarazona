@@ -28,7 +28,7 @@ end
 function f()
 end
 
-function f(a, b)
+function a(a, b)
 end
 
 
