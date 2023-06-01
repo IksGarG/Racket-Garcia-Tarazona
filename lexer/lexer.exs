@@ -26,6 +26,9 @@ defmodule Lexer do
                   .number {
                     color: brown;
                   }
+                  .variable {
+                    color: purple;
+                  }
                 </style>
               </head>
               <body>
@@ -69,6 +72,14 @@ defmodule Lexer do
       Regex.scan(~r/\bdo\b/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
+      # repeat
+      Regex.scan(~r/\brepeat\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # until
+      Regex.scan(~r/\buntil\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
       # while
       Regex.scan(~r/\bwhile\b/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
@@ -81,8 +92,12 @@ defmodule Lexer do
       Regex.scan(~r/\b[\d]\b/, keyword) |> Enum.any?() ->
         "<span class=\"number\">#{keyword}</span>"
 
+      # parenthesis
+      Regex.scan(~r/\b\(\b/, keyword) |> Enum.any?() ->
+        "<span class=\"number\">#{keyword}</span>"
+
       true ->
-        "<span class=\"rest\">#{keyword}</span>"
+        "<span class=\"variable\">#{keyword}</span>"
     end
 
     process_line(rest, "#{acc} #{html}")
