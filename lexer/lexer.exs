@@ -18,13 +18,16 @@ defmodule Lexer do
                     color: blue;
                   }
                   .rest {
-                    color: red;
+                    color: crimson;
                   }
                   .highlight {
                     color: green;
                   }
                   .number {
                     color: brown;
+                  }
+                  .parenthesis {
+                    color: violet;
                   }
                   .variable {
                     color: purple;
@@ -93,8 +96,8 @@ defmodule Lexer do
         "<span class=\"number\">#{keyword}</span>"
 
       # parenthesis
-      Regex.scan(~r/\b\(\b/, keyword) |> Enum.any?() ->
-        "<span class=\"number\">#{keyword}</span>"
+      Regex.scan(~r/[\s\S]*\(.*\)/, keyword) |> Enum.any?() ->
+        process_function(String.split(keyword, ""), "")
 
       true ->
         "<span class=\"variable\">#{keyword}</span>"
@@ -104,5 +107,17 @@ defmodule Lexer do
   end
 
   defp process_line([], acc), do: acc
+
+  defp process_function([], acc), do: acc
+  defp process_function([head | tail], acc) do
+    html = cond do
+       Regex.scan(~r/(\(|\))/, head) |> Enum.any?() ->
+        "<span class=\"parenthesis\">#{head}</span>"
+
+        true -> 
+        "<span class=\"rest\">#{head}</span>"
+    end
+    process_function(tail, "#{acc}#{html}")
+  end
 end
 
