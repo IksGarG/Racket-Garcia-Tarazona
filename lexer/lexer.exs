@@ -12,6 +12,7 @@ defmodule Lexer do
                 <title>Lexer Output</title>
                 <style>
                   body {
+                    background: #1e1e1e;
                     font-family: sans-serif;
                   }
                   .keyword {
@@ -100,6 +101,18 @@ defmodule Lexer do
       Regex.scan(~r/[\s\S]*\(.*\)/, keyword) |> Enum.any?() ->
         process_function(String.split(keyword, ""), "")
 
+      # if
+      Regex.scan(~r/\bif\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # then
+      Regex.scan(~r/\bthen\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # else
+      Regex.scan(~r/\belse\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
       true ->
         "<span class=\"variable\">#{keyword}</span>"
     end
@@ -125,4 +138,3 @@ defmodule Lexer do
     process_function(tail, "#{acc}#{html}")
   end
 end
-
