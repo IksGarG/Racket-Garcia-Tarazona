@@ -23,6 +23,9 @@ defmodule Lexer do
                   .highlight {
                     color: green;
                   }
+                  .number {
+                    color: brown;
+                  }
                 </style>
               </head>
               <body>
@@ -50,11 +53,39 @@ defmodule Lexer do
       Regex.scan(~r/\bend\b/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
+      # comments
+      Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{acc}</span>"
+
+      # To interpret variables
+      Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # Fors
+      Regex.scan(~r/\bfor\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # Do
+      Regex.scan(~r/\bdo\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # while
+      Regex.scan(~r/\bwhile\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # in
+      Regex.scan(~r/\bin\b/, keyword) |> Enum.any?() ->
+        "<span class=\"keyword\">#{keyword}</span>"
+
+      # numbers
+      Regex.scan(~r/\b[\d]\b/, keyword) |> Enum.any?() ->
+        "<span class=\"number\">#{keyword}</span>"
+
       true ->
         "<span class=\"rest\">#{keyword}</span>"
     end
 
-    process_line(rest, "#{acc}#{html}")
+    process_line(rest, "#{acc} #{html}")
   end
 
   defp process_line([], acc), do: acc
