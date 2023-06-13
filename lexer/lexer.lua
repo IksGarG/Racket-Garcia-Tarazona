@@ -3,12 +3,12 @@ print("Hi")
 
 -- comment
 t = {}
-t = { a = 1, b = 2 }
+t = { a = 1.2, b = 2 }
 
 while condition do
 end
 
-for i = 1,5 do
+for i = 1.5 do
 end
 
 for v in pairs(t) do
@@ -27,6 +27,8 @@ end
 
 function f()
 end
+
+t = "Hola"
 
 function a(a, b)
 end

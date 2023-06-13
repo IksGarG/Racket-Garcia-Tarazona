@@ -44,6 +44,9 @@ defmodule Lexer do
                    .comment {
                      color: grey;
                    }
+                   .strings {
+                     color: gold;
+                   }
                 </style>
               </head>
               <body>
@@ -56,26 +59,19 @@ defmodule Lexer do
   end
 
   def readline(line) do
-    words = String.split(line, " ")
+    words = String.split(line, "")
     process_line(words, "")
   end
   
   #defp process_line([keyword | rest]) 
 
   defp process_line([keyword | rest], acc) do
-    if Regex.scan(~r/\-\-/, keyword) |> Enum.any?() do
-      process_line([], "<span class=\"comment\">#{keyword}#{Enum.join(rest, "")}</span>")
-
-  else
+    cond do 
+      Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
+        process_line([], "<span class=\"comment\">#{keyword}#{Enum.join(rest, "")}</span>")
+  
+    true -> 
     html = cond do
-      # function
-      Regex.scan(~r/\bfunction\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # end
-      Regex.scan(~r/\bend\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
       # To interpret variables
       Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
@@ -84,57 +80,25 @@ defmodule Lexer do
       Regex.scan(~r/(\+|\-|\/|\*){1}/, keyword) |> Enum.any?() ->
         "<span class=\"operations\">#{keyword}</span>"
 
-      # Fors
-      Regex.scan(~r/\bfor\b/, keyword) |> Enum.any?() ->
+      # Keywords
+      Regex.scan(~r/(\bfor\b|\bdo\b|\bif\b|\belse\b|\brepeat\b|\blocal\b|\buntil\b|\bwhile\b|\bin\b|\bthen\b|\bfunction\b|\bend\b|\belseif\b)/, keyword) |> Enum.any?() ->
         "<span class=\"keyword\">#{keyword}</span>"
 
-      # Do
-      Regex.scan(~r/\bdo\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # repeat
-      Regex.scan(~r/\brepeat\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # local
-      Regex.scan(~r/\blocal\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # until
-      Regex.scan(~r/\buntil\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # while
-      Regex.scan(~r/\bwhile\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # in
-      Regex.scan(~r/\bin\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
+      # Strings
+      Regex.scan(~r/\"/, keyword) |> Enum.any?() ->
+        process_string(String.split(keyword, ""), "", 0)
 
       # numbers
-      Regex.scan(~r/\b[\d]\b/, keyword) |> Enum.any?() ->
+      Regex.scan(~r/(\b[\d]\b|\b[\d]\.[\d]\b)/, keyword) |> Enum.any?() ->
         "<span class=\"number\">#{keyword}</span>"
 
-      # parenthesis
-      Regex.scan(~r/[\s\S]*\(.*\)/, keyword) |> Enum.any?() ->
+      # tailend of funcs
+      Regex.scan(~r/\)/, keyword) |> Enum.any?() ->
         process_function(String.split(keyword, ""), "")
 
       # table
-      Regex.scan(~r/.*\{(.|\,)*\}/, keyword) |> Enum.any?() ->
+      Regex.scan(~r/(\{|\})/, keyword) |> Enum.any?() ->
         "<span class=\"parenthesis\">#{keyword}</span>"
-
-      # if
-      Regex.scan(~r/\bif\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # then
-      Regex.scan(~r/\bthen\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
-
-      # else
-      Regex.scan(~r/\belse\b/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
 
       true ->
         "<span class=\"variable\">#{keyword}</span>"
@@ -146,15 +110,32 @@ defmodule Lexer do
 
   defp process_line([], acc), do: acc
 
+  defp process_string(rest, acc, count) when count == 2, do: "<span class=\"strings\">#{acc}</span>"
+  defp process_string([head|tail], acc, count) do
+    html = cond do
+      Regex.scan(~r/\"/, head) |> Enum.any?() ->
+        process_string(tail, "#{acc}#{head}", count + 1)
+
+        true ->
+          process_string(tail, "#{acc}#{head}", count)
+    end
+    |> IO.inspect()
+  end
+  
   defp process_function([], acc), do: acc
   defp process_function([head | tail], acc) do
+    IO.puts(head)
     html = cond do
-       Regex.scan(~r/(\(|\))/, head) |> Enum.any?() ->
+       Regex.scan(~r/\(/, head) |> Enum.any?() ->
         "<span class=\"parenthesis\">#{head}</span>"
+        |> process_args(tail, "")
 
         true ->
         "<span class=\"rest\">#{head}</span>"
+        |> process_function(tail, "#{acc}#{html}")
     end
-    process_function(tail, "#{acc}#{html}")
   end
+
+  defp process_args([], acc), do: acc
+    
 end
