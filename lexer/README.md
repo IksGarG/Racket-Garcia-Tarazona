@@ -1,56 +1,44 @@
-Andres Tarazona Solloa
-Iker Garcia German
+# Readme
 
-# LEXER de Lua
+## Introducción
+El módulo `Lexer` es un sencillo analizador léxico escrito en Elixir. Toma un archivo con código fuente como entrada y genera un archivo HTML donde cada tipo de token (palabras clave, números, operaciones, etc.) en la entrada está resaltado con un color específico.
 
-La función del lexer se encuentra en el módulo "Lexer" y se llama con `Lexer.lexer()`.
+## Componentes Clave
+
+### lexer/2
+Esta función lee el contenido del archivo de entrada y procesa cada línea llamando a la función `readline/1`. Las líneas procesadas se unen en una única cadena, que se inserta en la salida HTML.
+
+### readline/1
+Esta función captura el espacio en blanco inicial en una línea de código y llama a la función `process_line/3` para procesar el resto de la línea.
+
+### process_line/3
+Esta función toma una línea de código, identifica el tipo del primer token en la línea, y lo envuelve en una etiqueta `<span>` con una clase CSS correspondiente a su tipo. El resto de la línea se procesa de manera recursiva.
+
+## Cómo Probar
+
+Para probar este módulo, necesitas llamar a la función `lexer/2` con los nombres de los archivos de entrada y salida como argumentos. Por ejemplo:
 
 ```elixir
-Lexer.lexer(in_file, out_file)
+Lexer.lexer("dot_file.lua", "dot_file.html")
 ```
 
-La variable `in_file` es el archivo que se quiere analizar, y `out_file` es el archivo donde se generará el HTML.
+Este comando leerá el archivo `dot_file.lua`, lo procesará, y escribirá la salida HTML en el archivo `dot_file.html`.
 
-Entonces, basado en los ejemplos de nuestro código, se utiliza de la siguiente forma:
+## Tokens y Colores Correspondientes
 
-```elixir
-Lexer.lexer("lexer.lua", "lexer.html")
-Lexer.lexer("test.lua", "test.html")
-Lexer.lexer("table.lua", "table.html")
-```
+| Token       | Clase CSS  | Color  |
+| ----------- | ---------- | ------ |
+| Palabra clave | keyword   | azul marino |
+| Cadena de texto | highlight | verde  |
+| Número     | number     | cafe |
+| Paréntesis | parenthesis | negro  |
+| Variable   | variable   | morado |
+| Operación  | operations | rojo   |
+| Comentario | comment    | gris   |
+| Función    | function   | azul   |
 
-## Funcionalidad
+## Notación Big O
 
-El lexer se encarga de leer el archivo y separar los tokens en diferentes categorías, como se muestra en la siguiente tabla:
+La operación principal de este programa es la función `process_line/3`, que se llama una vez para cada carácter en la entrada. Esta función utiliza expresiones regulares para identificar el tipo de token al inicio de la línea, y la complejidad temporal de estas operaciones es generalmente proporcional a la longitud de la línea. Por lo tanto, la complejidad temporal general del programa es aproximadamente O(n*m), donde n es el número de líneas en el archivo de entrada y m es la longitud media de una línea.
 
-| Categoría    | Descripción                                      |
-| ------------ | ------------------------------------------------ |
-| `keyword`    | Palabras reservadas                              |
-| `rest`       | Resto de palabras                                |
-| `number`     | Números                                          |
-| `highlight`  | Palabras que se deben resaltar                    |
-| `comment`    | Comentarios                                      |
-| `parenthesis`| Paréntesis                                       |
-| `variable`   | Variables                                        |
-| `operations` | Operaciones                                      |
-
-## Función principal
-
-La función `process_line/3` recibe una lista de palabras y un acumulador (`acc`) como entrada. Inspecciona el valor actual del acumulador utilizando `IO.inspect/2`. Luego, verifica si la primera palabra en la lista (`keyword`) cumple ciertas condiciones utilizando expresiones regulares. Si cumple alguna condición, genera un elemento span HTML con una clase específica basada en la condición y lo agrega al acumulador. Si ninguna condición coincide, genera un elemento span HTML con una clase diferente y lo agrega al acumulador. Finalmente, se llama recursivamente a sí misma con las palabras restantes en la lista y el acumulador actualizado.
-
-### Cambios importantes
-
-- Se agregó una nueva variable llamada `white_space` en la función `readline/1` para capturar el espacio en blanco al comienzo de cada línea.
-
-- En la función `process_line/3`, se manejaron dos nuevos casos en el condicional para considerar líneas que consisten únicamente en espacios en blanco y líneas que comienzan con un token individual.
-
-- Se modificó la función `token_html/3` para que siempre devuelva una tupla con el token y la clase correspondiente.
-
-- Se envuelve el contenido de cada línea en un elemento `<pre>` en el código HTML generado para preservar la indentación original del código.
-
-### Complejidad
-
-La complejidad general del código puede considerarse lineal en función del tamaño del archivo de entrada y salida, así como de la longitud de las líneas y las palabras en el archivo de entrada. La coincidencia de expresiones regulares y las operaciones en cada línea se realizan de forma eficiente y no se espera que sean un factor limitante en el rendimiento.
-
-
-
+Sin embargo, ten en cuenta que esta es una estimación aproximada y la complejidad temporal real puede variar dependiendo del contenido específico de la entrada. Por ejemplo, las líneas con un mayor número de tokens pueden requerir más tiempo para procesarse. Además, las operaciones de entrada/salida (lectura del archivo de entrada y escritura del archivo de salida) también pueden tener un impacto significativo en el rendimiento.
