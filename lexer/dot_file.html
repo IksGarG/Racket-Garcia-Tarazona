@@ -1,0 +1,89 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <title>Lexer Output</title>
+     <style>
+        body {
+          background: lightgray;
+          font-family: sans-serif;
+          font-size: 1.5em;
+        }
+        .keyword {
+          color: navy;
+        }
+        .highlight {
+          color: green;
+        }
+        .number {
+          color: brown;
+        }
+        .parenthesis {
+          color: black;
+        }
+        .variable {
+          color: purple;
+        }
+        .operations {
+          color: red;
+        }
+        .comment {
+          color: grey;
+        }
+        .function {
+          color: blue;
+        }
+     </style>
+   </head>
+   <body>
+     <pre><span class="variable">vim</span><span class="highlight">" "</span><span class="rest">.</span><span class="variable">g</span><span class="rest">.</span><span class="variable">mapleader</span><span class=""> </span><span class="operations">=</span><span class=""> 
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>pv"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="variable">vim</span><span class="rest">.</span><span class="variable">cmd</span><span class="rest">.</span><span class="variable">Vex</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"v", "J", ":m '>+1<CR>gv=gv"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"v", "K", ":m '<-2<CR>gv=gv"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "J", "mzJ`z"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<C-d>", "<C-d>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<C-u>", "<C-u>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "n", "nzzzv"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "N", "Nzzzv"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>vwm"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="keyword">function</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="highlight">"vim-with-me"</span><span class="">    </span><span class="function">require</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="rest">.</span><span class="function">StartVimWithMe</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="keyword">end</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>svwm"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="keyword">function</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="highlight">"vim-with-me"</span><span class="">    </span><span class="function">require</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="rest">.</span><span class="function">StopVimWithMe</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="keyword">end</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="comment">-- greatest remap ever</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"x", "<leader>p", [["</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="variable">_dP</span><span class="rest">]</span><span class="rest">]</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="comment">-- next greatest remap ever : asbjornHaland</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "v" }, "<leader>y", [["</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">{</span><span class=""> </span><span class="operations">+</span><span class="variable">y</span><span class="rest">]</span><span class="rest">]</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>Y", [["</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="operations">+</span><span class="variable">Y</span><span class="rest">]</span><span class="rest">]</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "v" }, "<leader>d", [["</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">{</span><span class=""> </span><span class="variable">_d</span><span class="rest">]</span><span class="rest">]</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="comment">-- This is going to get me cancelled</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"i", "<C-c>", "<Esc>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "Q", "<nop>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>f"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="variable">vim</span><span class="rest">.</span><span class="variable">lsp</span><span class="rest">.</span><span class="variable">buf</span><span class="rest">.</span><span class="variable">format</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<C-k>", "<cmd>cnext<CR>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<C-j>", "<cmd>cprev<CR>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>k", "<cmd>lnext<CR>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>j", "<cmd>lprev<CR>zz"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>s"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="rest">[</span><span class="rest">[</span><span class="rest">:</span><span class="rest">%</span><span class="variable">s</span><span class="operations">/</span><span class="rest">\</span><span class="rest"><</span><span class="rest"><</span><span class="variable">C</span><span class="operations">-</span><span class="variable">r</span><span class="rest">></span><span class="rest"><</span><span class="variable">C</span><span class="operations">-</span><span class="variable">w</span><span class="rest">></span><span class="rest">\</span><span class="rest">></span><span class="operations">/</span><span class="rest"><</span><span class="variable">C</span><span class="operations">-</span><span class="variable">r</span><span class="rest">></span><span class="rest"><</span><span class="variable">C</span><span class="operations">-</span><span class="variable">w</span><span class="rest">></span><span class="operations">/</span><span class="variable">gI</span><span class="rest"><</span><span class="variable">Left</span><span class="rest">></span><span class="rest"><</span><span class="variable">Left</span><span class="rest">></span><span class="rest"><</span><span class="variable">Left</span><span class="rest">></span><span class="rest">]</span><span class="rest">]</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>x", "<cmd>!chmod +x %<CR>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="rest">{</span><span class=""> </span><span class="variable">silent</span><span class=""> </span><span class="operations">=</span><span class=""> </span><span class="variable">true</span><span class=""> </span><span class="rest">}</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="comment">-- MarkDown</span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"n", "<leader>md", "<cmd>MarkdownPreview<CR>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="rest">,</span><span class=""> </span><span class="rest">{</span><span class=""> </span><span class="variable">silent</span><span class=""> </span><span class="operations">=</span><span class=""> </span><span class="variable">true</span><span class=""> </span><span class="rest">}</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span><br><span class="comment">-- Silicon Remaps </span><span class="">
+</span><br><span class="function">vim</span><span class="highlight">"v", "<leader>s", "<cmd>lua require('silicon').silicon()<CR>"</span><span class="rest">.</span><span class="function">keymap</span><span class="rest">.</span><span class="function">set</span><span class="parenthesis">(</span><span class="parenthesis">)</span><span class="">
+</span><br><span class="">
+</span></pre>
+   </body>
+ </html>
