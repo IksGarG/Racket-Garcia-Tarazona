@@ -19,9 +19,6 @@ defmodule Lexer do
                    .keyword {
                      color: navy;
                    }
-                   .rest {
-                     color: peru;
-                   }
                    .highlight {
                      color: green;
                    }
@@ -39,6 +36,9 @@ defmodule Lexer do
                    }
                    .comment {
                      color: grey;
+                   }
+                   .function {
+                     color: blue;
                    }
                 </style>
               </head>
@@ -62,13 +62,13 @@ defmodule Lexer do
       match = Regex.run(~r/^\-\-.*/, line) ->
         token_html(match, "comment", white_space)
 
-      match = Regex.run(~r/^(function|end|for|do|repeat|local|until|while|in|if|then|else)\b/, line) ->
+      match = Regex.run(~r/^(function|end|for|do|repeat|local|until|while|in|if|then|else|elseif)\b/, line) ->
         token_html(match, "keyword", white_space)
 
-      match = Regex.run(~r/^(\+|\-|\/|\*|=)/, line) ->
+      match = Regex.run(~r/^(\+|\-|\/|\*|\=)/, line) ->
         token_html(match, "operations", white_space)
 
-      match = Regex.run(~r/^\b\d+\b/, line) ->
+      match = Regex.run(~r/^\b\d+[.\d]*\b/, line) ->
         token_html(match, "number", white_space)
 
       match = Regex.run(~r/^(\(|\))/, line) ->
@@ -80,6 +80,12 @@ defmodule Lexer do
       match = Regex.run(~r/^\s+/, line) ->
         {match, ""}
 
+      match = Regex.run(~r/\".*\"/, line) ->
+        token_html(match, "highlight", white_space)
+
+      match = Regex.run(~r/^\b.*\(.*\)/, line) ->
+        token_html(match, "function", white_space)
+
       true ->
         {String.slice(line, 0..0), "rest"}
     end
@@ -87,6 +93,7 @@ defmodule Lexer do
     {token, class} = result
     new_acc = "#{acc}<span class=\"#{class}\">#{token}</span>"
     remaining_code = String.replace(line, token, "", global: false)
+
     process_line(remaining_code, white_space, new_acc)
   end
 
