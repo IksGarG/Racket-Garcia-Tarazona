@@ -71,20 +71,21 @@ defmodule Lexer do
       match = Regex.run(~r/^\b\d+[.\d]*\b/, line) ->
         token_html(match, "number", white_space)
 
-      match = Regex.run(~r/^(\(|\))/, line) ->
+      match = Regex.run(~r/^(\(|\)|\,)/, line) ->
         token_html(match, "parenthesis", white_space)
 
-      match = Regex.run(~r/^\b\w+\b/, line) ->
-        token_html(match, "variable", white_space)
+      match = Regex.run(~r/^\b\w+/, line) ->
+        if Regex.run(~r/^\b\w+[\.\w+]*\(/, line) do
+          token_html(match, "function", white_space)
+        else 
+          token_html(match, "variable", white_space)
+        end
+
+      match = Regex.run(~r/^\".*\"/, line) ->
+        token_html(match, "highlight", white_space)
 
       match = Regex.run(~r/^\s+/, line) ->
         {match, ""}
-
-      match = Regex.run(~r/\".*\"/, line) ->
-        token_html(match, "highlight", white_space)
-
-      match = Regex.run(~r/^\b.*\(.*\)/, line) ->
-        token_html(match, "function", white_space)
 
       true ->
         {String.slice(line, 0..0), "rest"}
