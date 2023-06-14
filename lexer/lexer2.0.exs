@@ -98,18 +98,6 @@ defmodule Lexer do
     process_line(remaining_code, white_space, new_acc)
   end
 
-  defp process_string(rest, acc, count) when count == 2, do: "<span class=\"strings\">#{acc}</span>"
-  defp process_string([head|tail], acc, count) do
-    html = cond do
-      Regex.scan(~r/\"/, head) |> Enum.any?() ->
-        process_string(tail, "#{acc}#{head}", count + 1)
-
-        true ->
-          process_string(tail, "#{acc}#{head}", count)
-    end
-    |> IO.inspect()
-  end
-
   defp token_html([match | _], class, _white_space) do
     {match, class}
   end
