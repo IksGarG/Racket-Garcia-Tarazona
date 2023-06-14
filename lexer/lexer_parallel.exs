@@ -1,4 +1,10 @@
 defmodule Lexer do
+  def readfiles(files, out_files) do
+    files
+    |> Enum.zip(out_files)
+    |> Enum.map(&Task.async(fn {file, out_file} -> lexer(file, out_file) end))
+    |> Enum.map(&Task.await(&1))
+  end
   def lexer(in_filename, out_filename) do
     data = in_filename
           |> File.stream!()
@@ -53,11 +59,11 @@ defmodule Lexer do
 
   def readline(line) do
     white_space = Regex.run(~r/^\s*/, line) |> List.first()
-    process_line(line, white_space, "", nil, nil)
+    process_line(line, white_space, "")
   end
 
-  defp process_line("", _white_space, acc, _function_name, _in_function), do: acc
-  defp process_line(line, white_space, acc, function_name, in_function) do
+  defp process_line("", _white_space, acc), do: acc
+  defp process_line(line, white_space, acc) do
     result = cond do
       match = Regex.run(~r/^\-\-.*/, line) ->
         token_html(match, "comment", white_space)
@@ -68,24 +74,24 @@ defmodule Lexer do
       match = Regex.run(~r/^(\+|\-|\/|\*|\=)/, line) ->
         token_html(match, "operations", white_space)
 
-      match = Regex.run(~r/^(\(|\))/, line) ->
+      match = Regex.run(~r/^\b\d+[.\d]*\b/, line) ->
+        token_html(match, "number", white_space)
+
+      match = Regex.run(~r/^(\(|\)|\,)/, line) ->
         token_html(match, "parenthesis", white_space)
 
-      match = Regex.run(~r/^\b\w+\(/, line) ->
-        if in_function || function_name && String.starts_with?(line, function_name <> "(") do
+      match = Regex.run(~r/^\b\w+/, line) ->
+        if Regex.run(~r/^\b\w+[\.\w+]*\(/, line) do
           token_html(match, "function", white_space)
-        else
+        else 
           token_html(match, "variable", white_space)
         end
 
-      match = Regex.run(~r/^\b\w+\b/, line) ->
-        token_html(match, "variable", white_space)
+      match = Regex.run(~r/^\"(.*?)\"/, line) ->
+        token_html(match, "highlight", white_space)
 
       match = Regex.run(~r/^\s+/, line) ->
         {match, ""}
-
-      match = Regex.run(~r/\".*\"/, line) ->
-        token_html(match, "highlight", white_space)
 
       true ->
         {String.slice(line, 0..0), "rest"}
@@ -94,18 +100,11 @@ defmodule Lexer do
     {token, class} = result
     new_acc = "#{acc}<span class=\"#{class}\">#{token}</span>"
     remaining_code = String.replace(line, token, "", global: false)
-    process_line(remaining_code, white_space, new_acc, function_name, in_function)
+
+    process_line(remaining_code, white_space, new_acc)
   end
 
   defp token_html([match | _], class, _white_space) do
     {match, class}
-  end
-
-  defp token_html(nil, class, _white_space) do
-    {nil, class}
-  end
-
-  defp token_html(match, _class, _white_space) do
-    {match, ""}
   end
 end
