@@ -1,4 +1,4 @@
-# Readme
+# LUA Lxer
 
 ## Introducción
 El módulo `Lexer` es un sencillo analizador léxico escrito en Elixir. Toma un archivo con código fuente como entrada y genera un archivo HTML donde cada tipo de token (palabras clave, números, operaciones, etc.) en la entrada está resaltado con un color específico.
@@ -41,4 +41,4 @@ Este comando leerá el archivo `dot_file.lua`, lo procesará, y escribirá la sa
 
 La operación principal de este programa es la función `process_line/3`, que se llama una vez para cada carácter en la entrada. Esta función utiliza expresiones regulares para identificar el tipo de token al inicio de la línea, y la complejidad temporal de estas operaciones es generalmente proporcional a la longitud de la línea. Por lo tanto, la complejidad temporal general del programa es aproximadamente O(n*m), donde n es el número de líneas en el archivo de entrada y m es la longitud media de una línea.
 
-Sin embargo, ten en cuenta que esta es una estimación aproximada y la complejidad temporal real puede variar dependiendo del contenido específico de la entrada. Por ejemplo, las líneas con un mayor número de tokens pueden requerir más tiempo para procesarse. Además, las operaciones de entrada/salida (lectura del archivo de entrada y escritura del archivo de salida) también pueden tener un impacto significativo en el rendimiento.
+Sin embargo, hay que tener en cuenta que esta es una estimación aproximada y la complejidad temporal real puede variar dependiendo del contenido específico de la entrada. Por ejemplo, las líneas con un mayor número de tokens pueden requerir más tiempo para procesarse. Además, las operaciones de entrada/salida (lectura del archivo de entrada y escritura del archivo de salida) también pueden tener un impacto significativo en el rendimiento.
