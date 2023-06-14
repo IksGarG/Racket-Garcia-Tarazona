@@ -1,7 +1,3 @@
-# With love by:
-#   - Andres Tarazona Solloa
-#   - Iker Garcia German
-
 defmodule Lexer do
   def lexer(in_filename, out_filename) do
     data = in_filename
@@ -23,9 +19,6 @@ defmodule Lexer do
                    .keyword {
                      color: navy;
                    }
-                   .rest {
-                     color: peru;
-                   }
                    .highlight {
                      color: green;
                    }
@@ -44,13 +37,13 @@ defmodule Lexer do
                    .comment {
                      color: grey;
                    }
-                   .strings {
-                     color: gold;
+                   .function {
+                     color: blue;
                    }
                 </style>
               </head>
               <body>
-                #{data}
+                <pre>#{data}</pre>
               </body>
             </html>
            """
@@ -59,83 +52,53 @@ defmodule Lexer do
   end
 
   def readline(line) do
-    words = String.split(line, "")
-    process_line(words, "")
+    white_space = Regex.run(~r/^\s*/, line) |> List.first()
+    process_line(line, white_space, "")
   end
-  
-  #defp process_line([keyword | rest]) 
 
-  defp process_line([keyword | rest], acc) do
-    cond do 
-      Regex.scan(~r/\-\-/, keyword) |> Enum.any?() ->
-        process_line([], "<span class=\"comment\">#{keyword}#{Enum.join(rest, "")}</span>")
-  
-    true -> 
-    html = cond do
-      # To interpret variables
-      Regex.scan(~r/\=/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
+  defp process_line("", _white_space, acc), do: acc
+  defp process_line(line, white_space, acc) do
+    result = cond do
+      match = Regex.run(~r/^\-\-.*/, line) ->
+        token_html(match, "comment", white_space)
 
-      # Operations
-      Regex.scan(~r/(\+|\-|\/|\*){1}/, keyword) |> Enum.any?() ->
-        "<span class=\"operations\">#{keyword}</span>"
+      match = Regex.run(~r/^(function|end|for|do|repeat|local|until|while|in|if|then|else|elseif)\b/, line) ->
+        token_html(match, "keyword", white_space)
 
-      # Keywords
-      Regex.scan(~r/(\bfor\b|\bdo\b|\bif\b|\belse\b|\brepeat\b|\blocal\b|\buntil\b|\bwhile\b|\bin\b|\bthen\b|\bfunction\b|\bend\b|\belseif\b)/, keyword) |> Enum.any?() ->
-        "<span class=\"keyword\">#{keyword}</span>"
+      match = Regex.run(~r/^(\+|\-|\/|\*|\=)/, line) ->
+        token_html(match, "operations", white_space)
 
-      # Strings
-      Regex.scan(~r/\"/, keyword) |> Enum.any?() ->
-        process_string(String.split(keyword, ""), "", 0)
+      match = Regex.run(~r/^\b\d+[.\d]*\b/, line) ->
+        token_html(match, "number", white_space)
 
-      # numbers
-      Regex.scan(~r/(\b[\d]\b|\b[\d]\.[\d]\b)/, keyword) |> Enum.any?() ->
-        "<span class=\"number\">#{keyword}</span>"
+      match = Regex.run(~r/^(\(|\)|\,)/, line) ->
+        token_html(match, "parenthesis", white_space)
 
-      # tailend of funcs
-      Regex.scan(~r/\)/, keyword) |> Enum.any?() ->
-        process_function(String.split(keyword, ""), "")
+      match = Regex.run(~r/^\b\w+/, line) ->
+        if Regex.run(~r/^\b\w+[\.\w+]*\(/, line) do
+          token_html(match, "function", white_space)
+        else 
+          token_html(match, "variable", white_space)
+        end
 
-      # table
-      Regex.scan(~r/(\{|\})/, keyword) |> Enum.any?() ->
-        "<span class=\"parenthesis\">#{keyword}</span>"
+      match = Regex.run(~r/^\"(.*?)\"/, line) ->
+        token_html(match, "highlight", white_space)
+
+      match = Regex.run(~r/^\s+/, line) ->
+        {match, ""}
 
       true ->
-        "<span class=\"variable\">#{keyword}</span>"
-    end
-    process_line(rest, "#{acc} #{html}")
+        {String.slice(line, 0..0), "rest"}
     end
 
+    {token, class} = result
+    new_acc = "#{acc}<span class=\"#{class}\">#{token}</span>"
+    remaining_code = String.replace(line, token, "", global: false)
+
+    process_line(remaining_code, white_space, new_acc)
   end
 
-  defp process_line([], acc), do: acc
-
-  defp process_string(rest, acc, count) when count == 2, do: "<span class=\"strings\">#{acc}</span>"
-  defp process_string([head|tail], acc, count) do
-    html = cond do
-      Regex.scan(~r/\"/, head) |> Enum.any?() ->
-        process_string(tail, "#{acc}#{head}", count + 1)
-
-        true ->
-          process_string(tail, "#{acc}#{head}", count)
-    end
-    |> IO.inspect()
+  defp token_html([match | _], class, _white_space) do
+    {match, class}
   end
-  
-  defp process_function([], acc), do: acc
-  defp process_function([head | tail], acc) do
-    IO.puts(head)
-    html = cond do
-       Regex.scan(~r/\(/, head) |> Enum.any?() ->
-        "<span class=\"parenthesis\">#{head}</span>"
-        |> process_args(tail, "")
-
-        true ->
-        "<span class=\"rest\">#{head}</span>"
-        |> process_function(tail, "#{acc}#{html}")
-    end
-  end
-
-  defp process_args([], acc), do: acc
-    
 end
