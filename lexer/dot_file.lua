@@ -1,49 +1,57 @@
-vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Vex)
+local terminal = require("toggleterm.terminal").Terminal
+local M = {}
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+M.setup = function(opts)
+    M._asyncrun_mapping = opts.mapping
+    M._start_in_insert = opts.start_in_insert
+end
 
-vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+function M.reset()
+    if M._asyncrun_term ~= nil then
+        if vim.g.asynctasks_term_reuse ~= 1 then
+            -- TODO: handle multiple terminals
+            error("Terminal existed is not support . please set g.asynctasks_term_reuse = 1")
+        else
+            vim.notify("Delete existing terminal", "info")
+        end
+        M._asyncrun_term:shutdown()
+    end
 
-vim.keymap.set("n", "<leader>vwm", function()
-    require("vim-with-me").StartVimWithMe()
-end)
-vim.keymap.set("n", "<leader>svwm", function()
-    require("vim-with-me").StopVimWithMe()
-end)
+    M._asyncrun_term = nil
+    M._asyncrun_term_toggle = nil
+end
 
--- greatest remap ever
-vim.keymap.set("x", "<leader>p", [["_dP]])
+function M.runner(opts)
+    M.reset()
+    M._asyncrun_term = terminal:new({
+        cmd = opts.cmd,
+        dir = opts.cwd,
+        close_on_exit = false,
+        hidden = true,
+        on_open = function(term)
+            if M._start_in_insert then
+                vim.cmd("startinsert!")
+            else
+                vim.cmd("stopinsert!")
+            end
+        end
+    })
 
--- next greatest remap ever : asbjornHaland
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
+    function M._asyncrun_term_toggle()
+        M._asyncrun_term:toggle()
+    end
 
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+    if not opts.silent then
+        M._asyncrun_term_toggle()
+    end
 
--- This is going to get me cancelled
-vim.keymap.set("i", "<C-c>", "<Esc>")
+    if M._asyncrun_mapping then
+        vim.api.nvim_set_keymap("n", M._asyncrun_mapping,
+            "<cmd>lua require('asyncrun_toggleterm')._asyncrun_term_toggle()<CR>", {
+                noremap = true,
+                silent = true
+            })
+    end
+end
 
-vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
-
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
-
--- MarkDown
-vim.keymap.set("n", "<leader>md", "<cmd>MarkdownPreview<CR>", { silent = true })
-
--- Silicon Remaps 
-vim.keymap.set("v", "<leader>s", "<cmd>lua require('silicon').silicon()<CR>")
-
+return M
