@@ -38,13 +38,13 @@ defmodule Sums do
 
   def sequential_prime_sum do
     {time, result} = :timer.tc(fn -> range_sum({2, 5000000}) end)
-    IO.puts "Sequential Time: #{div(time, 1000000)} seconds. Result: #{result}"
+    IO.puts "Sequential Time: #{div(time, 1000)} milliseconds. Result: #{result}"
     time
   end
 
   def parallel_prime_sum(cores) do
     {time, result} = :timer.tc(fn -> total_sum(1, 5000000, cores) end)
-    IO.puts "Parallel Time with #{cores} cores: #{div(time, 1000000)} seconds. Result: #{result}"
+    IO.puts "Parallel Time with #{cores} cores: #{div(time, 1000)} milliseconds. Result: #{result}"
     time
   end
 
