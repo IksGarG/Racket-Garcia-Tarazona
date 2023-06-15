@@ -43,7 +43,7 @@ defmodule Sums do
   end
 
   def parallel_prime_sum(cores) do
-    {time, result} = :timer.tc(fn -> total_sum(2, 5000000, cores) end)
+    {time, result} = :timer.tc(fn -> total_sum(1, 5000000, cores) end)
     IO.puts "Parallel Time with #{cores} cores: #{div(time, 1000000)} seconds. Result: #{result}"
     time
   end
