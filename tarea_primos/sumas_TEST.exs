@@ -1,4 +1,4 @@
-
+# Test module, not final version
 
 defmodule Sums do
 
@@ -33,7 +33,7 @@ defmodule Sums do
 
   defp do_make_ranges(start, finish, _, res) when start == finish, do: res
   defp do_make_ranges(start, finish, range, res), do: do_make_ranges(start, finish - range, range, [{finish - range + 1, finish} | res])
- 
+
   def total_sum(start, finish, cores) do
     make_ranges(start, finish, cores)
     |> Enum.map(&Task.async(fn -> range_sum(&1) end))
