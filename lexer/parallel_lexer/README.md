@@ -1,5 +1,6 @@
 # Reflexiones sobre el rendimiento del analizador léxico
-
+- Andres Tarazona Solloa
+- Iker Garcia German
 ## Introducción
 
 En este proyecto, hemos desarrollado un analizador léxico en Elixir que puede analizar archivos de forma secuencial o en paralelo. Este analizador léxico ha sido implementado y probado exhaustivamente, y hemos evaluado su rendimiento en diferentes escenarios. Aquí discutimos los resultados y reflexionamos sobre las implicaciones éticas de esta tecnología.

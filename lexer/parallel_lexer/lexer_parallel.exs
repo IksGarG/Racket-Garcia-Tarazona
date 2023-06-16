@@ -1,3 +1,8 @@
+# Autores:
+# Andres Tarazona Solloa
+# Iker Garcia German
+
+# Main file for the parallel lexer
 defmodule Lexer do
   def lexer(in_filename, out_filename) do
     data = in_filename
